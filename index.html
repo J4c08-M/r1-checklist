@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Torba R1 – Checklista Wyposażenia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #C0392B;
+    --red-dark: #96281B;
+    --red-light: #FADBD8;
+    --red-mid: #E74C3C;
+    --bg: #F5F4F0;
+    --surface: #FFFFFF;
+    --surface2: #F0EFEB;
+    --border: #D5D3CB;
+    --border-strong: #B0ADA4;
+    --text: #1A1917;
+    --text-muted: #6B6860;
+    --text-hint: #9A9890;
+    --green: #1D7A4A;
+    --green-light: #D4EDDA;
+    --amber: #8B5E00;
+    --amber-light: #FFF3CD;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  .topbar {
+    background: var(--red);
+    padding: 14px 16px 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  }
+
+  .topbar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .topbar-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 17px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+
+  .topbar-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .progress-pill {
+    background: rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+    font-family: 'IBM Plex Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .progress-bar-wrap {
+    margin-top: 10px;
+    height: 3px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 2px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: #fff;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .content { padding: 16px; }
+
+  .header-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .header-card h2 {
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--red);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  .form-row {
+    margin-bottom: 10px;
+  }
+
+  .form-row label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .form-row input, .form-row textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    font-size: 14px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .form-row input:focus, .form-row textarea:focus {
+    border-color: var(--red);
+  }
+
+  .form-row textarea {
+    resize: none;
+    height: 90px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+
+
+  .section {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .section-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--red);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .section-info h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .section-info p {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .section-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stat-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .stat-badge.ok { background: var(--green-light); color: var(--green); }
+  .stat-badge.warn { background: var(--amber-light); color: var(--amber); }
+  .stat-badge.err { background: var(--red-light); color: var(--red-dark); }
+
+  .chevron {
+    font-size: 14px;
+    color: var(--text-muted);
+    transition: transform 0.2s;
+  }
+
+  .chevron.open { transform: rotate(180deg); }
+
+  .section-body {
+    display: none;
+    padding: 0;
+  }
+
+  .section-body.open { display: block; }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 52px;
+  }
+
+  .item:last-child { border-bottom: none; }
+
+  .item.checked { background: #F7FBF8; }
+
+  .item-check {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 5px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    background: var(--bg);
+    margin-right: 12px;
+  }
+
+  .item-check.checked {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .item-check.checked::after {
+    content: '';
+    width: 12px;
+    height: 7px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+    display: block;
+  }
+
+  .item-name {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.35;
+    cursor: pointer;
+  }
+
+  .item-name .sub {
+    font-size: 11px;
+    color: var(--text-hint);
+    margin-top: 1px;
+  }
+
+  .item.checked .item-name {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border-strong);
+  }
+
+  .qty-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+
+  .qty-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.1s;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    line-height: 1;
+  }
+
+  .qty-btn:active { background: var(--border); }
+
+  .qty-val {
+    width: 32px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text);
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    padding: 5px 0;
+    min-height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .qty-req {
+    font-size: 10px;
+    color: var(--text-hint);
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 2px;
+  }
+
+  .qty-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .reset-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif;
+    text-align: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .pdf-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: var(--red);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'IBM Plex Sans', sans-serif;
+    text-align: center;
+    letter-spacing: 0.2px;
+    margin-top: 16px;
+    box-shadow: 0 2px 8px rgba(192,57,43,0.35);
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+
+  .pdf-btn:active { background: var(--red-dark); box-shadow: none; }
+
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .summary-cell {
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: var(--radius-sm);
+    background: var(--surface2);
+  }
+
+  .summary-cell .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+  }
+
+  .summary-cell .lbl {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-top: 2px;
+    display: block;
+  }
+
+  .dynamic-section {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dynamic-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--surface2);
+  }
+
+  .dynamic-label {
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  .add-row-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dynamic-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-wrap: wrap;
+  }
+
+  .dynamic-row .item-check {
+    flex-shrink: 0;
+  }
+
+  .dyn-input {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    font-size: 12px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    min-width: 0;
+  }
+
+  .dyn-input:focus { border-color: var(--red); }
+
+  .dyn-size { flex: 2; min-width: 70px; }
+  .dyn-qty  { flex: 1; min-width: 44px; max-width: 60px; }
+  .dyn-exp  { flex: 2; min-width: 100px; }
+
+  .dyn-del {
+    background: none;
+    border: none;
+    color: var(--text-hint);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 2px 4px;
+    flex-shrink: 0;
+    line-height: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dyn-del:active { color: var(--red); }
+
+  .item-exp {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 4px 6px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+    background: var(--bg);
+    outline: none;
+    width: 110px;
+    flex-shrink: 0;
+    margin-left: 6px;
+  }
+
+  .item-exp:focus { border-color: var(--red); }
+
+  .item-exp.expired { border-color: var(--red); color: var(--red-dark); background: var(--red-light); }
+
+  .otc-qty-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: 6px;
+  }
+
+  .otc-qty-input {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 5px 6px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    width: 52px;
+    text-align: center;
+  }
+
+  .otc-qty-input:focus { border-color: var(--red); }
+
+  .otc-unit-select {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 5px 4px;
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    color: var(--text-muted);
+    background: var(--bg);
+    outline: none;
+    max-width: 90px;
+    cursor: pointer;
+  }
+
+  .otc-unit-select:focus { border-color: var(--red); }
+
+  .exp-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .na-check {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 3px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    transition: all 0.15s;
+  }
+
+  .na-check.checked {
+    background: var(--text-muted);
+    border-color: var(--text-muted);
+  }
+
+  .na-check.checked::after {
+    content: '';
+    width: 8px;
+    height: 5px;
+    border-left: 1.5px solid #fff;
+    border-bottom: 1.5px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+    display: block;
+  }
+
+  .na-label {
+    font-size: 9px;
+    color: var(--text-hint);
+    white-space: nowrap;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .item-exp.na-mode {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .dyn-input.dyn-exp.na-mode {
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .dyn-labels {
+    display: flex;
+    gap: 8px;
+    padding: 4px 14px 0 50px;
+    background: var(--surface2);
+  }
+
+  .dyn-lbl {
+    font-size: 9px;
+    color: var(--text-hint);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+
+  .dyn-lbl.s { flex: 2; min-width: 70px; }
+  .dyn-lbl.q { flex: 1; min-width: 44px; max-width: 60px; }
+  .dyn-lbl.e { flex: 2; min-width: 100px; }
+
+  .missing-tag {
+    display: inline-block;
+    background: var(--red-light);
+    color: var(--red-dark);
+    font-size: 10px;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-left: 6px;
+    vertical-align: middle;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <div class="topbar-title">🚑 Torba R1</div>
+      <div class="topbar-sub">Checklista wyposażenia modułowego</div>
+    </div>
+    <div class="progress-pill" id="prog-pill">0 / 0</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar" id="prog-bar" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- NAGŁÓWEK KONTROLI -->
+  <div class="header-card">
+    <a href="https://github.com/J4c08-M" target="_blank" style="display:flex;align-items:center;gap:8px;text-decoration:none;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;margin-bottom:14px;">
+      <svg height="20" width="20" viewBox="0 0 16 16" fill="var(--text-muted)"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span style="font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);font-weight:500;">github.com/J4c08-M</span>
+    </a>
+    <h2>📋 Dane kontroli</h2>
+    <div class="form-row">
+      <label>Oznaczenie / numer torby</label>
+      <input type="text" id="bag-id" placeholder="np. R1-KPP-01" />
+    </div>
+    <div class="form-row">
+      <label>Data kontroli</label>
+      <input type="date" id="check-date" />
+    </div>
+    <div class="form-row">
+      <label>Sprawdzający (imię i nazwisko)</label>
+      <input type="text" id="checker-name" placeholder="Jan Kowalski" />
+    </div>
+
+    <div class="form-row">
+      <label>Miejsce na podpis</label>
+      <div style="border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); background: var(--bg); height: 64px; display: flex; align-items: center; justify-content: center;">
+        <span style="font-size:12px; color:var(--text-hint); font-style:italic;">— podpis własnoręczny po wydruku —</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>Uwagi dodatkowe</label>
+      <textarea id="notes" placeholder="Np. brakujące pozycje zamówione, przeterminowane leki utylizowane..."></textarea>
+    </div>
+  </div>
+
+  <!-- PODSUMOWANIE -->
+  <div class="summary-card">
+    <div style="font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.6px;">Podsumowanie stanu</div>
+    <div class="summary-grid">
+      <div class="summary-cell">
+        <span class="val" id="s-total">0</span>
+        <span class="lbl">Pozycji</span>
+      </div>
+      <div class="summary-cell">
+        <span class="val" id="s-ok" style="color:var(--green)">0</span>
+        <span class="lbl">Obecnych</span>
+      </div>
+      <div class="summary-cell">
+        <span class="val" id="s-miss" style="color:var(--red)">0</span>
+        <span class="lbl">Brakuje</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEKCJE MODUŁÓW -->
+  <div id="sections-container"></div>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Zresetuj całą checklistę</button>
+  <button class="pdf-btn" onclick="generatePDF()">⬇ Generuj raport PDF</button>
+
+</div>
+
+<script>
+const MODULES = [
+  {
+    id: 'soo',
+    icon: '🦺',
+    name: 'ŚOO — Środki ochrony osobistej',
+    sub: 'Wyposażenie ochronne ratownika',
+    items: [
+      { _dynamic: 'rekawice', _label: 'Rękawice nitrylowe' },
+      { name: 'Maseczka chirurgiczna / FFP2', sub: '', qty: 4, req: 4 },
+      { name: 'Okulary ochronne / gogle', sub: '', qty: 1, req: 1 },
+      { name: 'Fartuch jednorazowy (izolacyjny)', sub: '', qty: 2, req: 2 },
+      { name: 'Kamizelka odblaskowa', sub: '', qty: 1, req: 1 },
+    ]
+  },
+  {
+    id: 'c1',
+    icon: '🩸',
+    name: 'C — Masywny krwotok',
+    sub: 'Hemorrhage control — priorytet życiowy',
+    items: [
+      { name: 'Opaska uciskowa CAT (Combat Application Tourniquet)', sub: 'lub SOFTT-W / EMT', qty: 4, req: 4 },
+      { name: 'Opatrunek hemostatyczny (Combat Gauze / QuikClot)', sub: 'min. 90 cm', qty: 4, req: 4 },
+      { name: 'Opatrunek okluzyjny wentylowany (Halo / SAM Chest Seal)', sub: 'na rany klatki piersiowej', qty: 1, req: 1 },
+      { name: 'Opatrunek osobisty „W"', sub: '', qty: 2, req: 2 },
+      { name: 'Chusta trójkątna tekstylna', sub: '', qty: 4, req: 4 },
+      { name: 'Żel schładzający', sub: 'min. 120 ml / opakowanie', qty: 2, req: 2 },
+      { name: 'Opatrunek hydrożelowy schładzający na twarz', sub: '', qty: 2, req: 2 },
+      { name: 'Opatrunki hydrożelowe schładzające', sub: 'min. 8 szt. pokrywających łącznie min. 6400 cm²', qty: 8, req: 8 },
+      { _dynamic: 'bandaze', _label: 'Bandaże elastyczne' },
+      { _dynamic: 'kompresy', _label: 'Kompresy jałowe' },
+      { _dynamic: 'gaza', _label: 'Gaza opatrunkowa' },
+      { _dynamic: 'bandaze_dzianinowe', _label: 'Bandaże dzianinowe' },
+      { _dynamic: 'codofix', _label: 'Codofix' },
+      { _dynamic: 'plaster_rolka', _label: 'Plaster przylepiec w rolce' },
+      { name: 'Marker permanentny (czarny)', sub: 'do oznaczania godziny założenia opaski', qty: 2, req: 2 },
+      { name: 'Worki na amputację', sub: 'sterylne, różne rozmiary', qty: 4, req: 4 },
+    ]
+  },
+  {
+    id: 'airway',
+    icon: '💨',
+    name: 'A — Drogi oddechowe',
+    sub: 'Airway management',
+    items: [
+      { name: 'Rurka Guedela rozmiar 0', sub: 'noworodek', qty: 1, req: 1 },
+      { name: 'Rurka Guedela rozmiar 1', sub: 'niemowlę', qty: 1, req: 1 },
+      { name: 'Rurka Guedela rozmiar 2', sub: 'małe dziecko', qty: 1, req: 1 },
+      { name: 'Rurka Guedela rozmiar 3', sub: 'dziecko / drobna dorosła', qty: 1, req: 1 },
+      { name: 'Rurka Guedela rozmiar 4', sub: 'dorosły średni', qty: 1, req: 1 },
+      { name: 'Rurka Guedela rozmiar 5', sub: 'dorosły duży', qty: 1, req: 1 },
+      { name: 'Rurka nosowo-gardłowa 6 mm', sub: 'z łącznikiem', qty: 1, req: 1 },
+      { name: 'Rurka nosowo-gardłowa 7 mm', sub: 'z łącznikiem', qty: 1, req: 1 },
+      { name: 'Rurka nosowo-gardłowa 8 mm', sub: 'z łącznikiem', qty: 1, req: 1 },
+      { name: 'Worek AMBU — dorośli', sub: 'z rezerwuarem O₂ i maską', qty: 1, req: 1 },
+      { name: 'Worek AMBU — pediatryczny', sub: 'z rezerwuarem O₂ i maską', qty: 1, req: 1 },
+      { name: 'Filtr bakteryjny do AMBU', sub: 'min. 5 szt.', qty: 5, req: 5 },
+      { name: 'Rurka krtaniowa jednorazowa rozmiar 0', sub: 'z uchwytem', qty: 1, req: 1 },
+      { name: 'Rurka krtaniowa jednorazowa rozmiar 1', sub: 'z uchwytem', qty: 1, req: 1 },
+      { name: 'Rurka krtaniowa jednorazowa rozmiar 2', sub: 'z uchwytem', qty: 1, req: 1 },
+      { name: 'Wskaźnik CO₂ w powietrzu wydychanym (kapnograf)', sub: '3 szt.', qty: 3, req: 3 },
+      { name: 'Przewód tlenowy 10 m', sub: '', qty: 1, req: 1 },
+      { name: 'Maska kieszonkowa do wentylacji', sub: '', qty: 2, req: 2 },
+      { name: 'Ssak ręczny (bulb lub pompka)', sub: '', qty: 1, req: 1 },
+      { name: 'Rurki do ssaka', sub: '', qty: 2, req: 2 },
+      { name: 'Maska krtaniowa LMA rozmiar 1', sub: 'noworodek / niemowlę do 5 kg', qty: 1, req: 1 },
+      { name: 'Maska krtaniowa LMA rozmiar 1,5', sub: 'niemowlę 5–10 kg', qty: 1, req: 1 },
+      { name: 'Maska krtaniowa LMA rozmiar 2', sub: 'dziecko 10–20 kg', qty: 1, req: 1 },
+      { name: 'Maska krtaniowa LMA rozmiar 2,5', sub: 'dziecko 20–30 kg', qty: 1, req: 1 },
+      { name: 'Maska krtaniowa LMA rozmiar 3', sub: 'dorosły drobny / 30–50 kg', qty: 1, req: 1 },
+      { name: 'Maska krtaniowa LMA rozmiar 4', sub: 'dorosły średni / 50–70 kg', qty: 1, req: 1 },
+      { name: 'Maska krtaniowa LMA rozmiar 5', sub: 'dorosły duży / 70–100 kg', qty: 1, req: 1 },
+      { name: 'Lubrykant do maski krtaniowej', sub: 'żel wodny, jednorazowe saszetki', qty: 5, req: 5 },
+    ]
+  },
+  {
+    id: 'breathing',
+    icon: '🫁',
+    name: 'B — Oddychanie',
+    sub: 'Breathing / wentylacja i tlenoterapia',
+    items: [
+      { name: 'Maska tlenowa z rezerwuarem (wysokoprzepływowa)', sub: 'dla dorosłych', qty: 2, req: 2 },
+      { name: 'Maska tlenowa pediatryczna', sub: '', qty: 1, req: 1 },
+      { name: 'Wąsy tlenowe (kaniula nosowa)', sub: '', qty: 2, req: 2 },
+      { name: 'Reduktor tlenu z przepływomierzem', sub: '', qty: 1, req: 1 },
+      { name: 'Butla tlenowa z zaworem', sub: 'ciśnienie sprawdzone', qty: 1, req: 1 },
+      { name: 'Igła do odbarczenia odmy (14G × 8 cm)', sub: 'lub komercyjny dekompressor', qty: 2, req: 2 },
+      { name: 'Zastawka Heimlicha', sub: '', qty: 1, req: 1 },
+      { name: 'Pulsoksymetr', sub: 'z bateriami', qty: 1, req: 1 },
+      { name: 'Stetoskop', sub: '', qty: 1, req: 1 },
+    ]
+  },
+  {
+    id: 'c2',
+    icon: '💓',
+    name: 'C — Krążenie',
+    sub: 'Circulation — dostęp naczyniowy i uzupełnianie',
+    items: [
+      { _dynamic: 'nacl', _label: 'NaCl 0,9% — płyny infuzyjne' },
+      { name: 'Staza gumowa / opaska uciskowa do wkłuć', sub: '', qty: 2, req: 2 },
+      { name: 'Strzykawki 5 ml', sub: '', qty: 5, req: 5 },
+      { name: 'Strzykawki 10 ml', sub: '', qty: 5, req: 5 },
+      { name: 'Igły 0,8×40 mm (zielone)', sub: '', qty: 10, req: 10 },
+    ]
+  },
+  {
+    id: 'disability',
+    icon: '🧠',
+    name: 'D — Ocena neurologiczna',
+    sub: 'Disability / ocena neurologiczna',
+    items: [
+      { name: 'Latarka diagnostyczna / penlight', sub: 'ocena źrenic', qty: 1, req: 1 },
+      { name: 'Glukoza 40% (amp. 20 ml)', sub: '', qty: 4, req: 4 },
+      { name: 'Glukoza żel (tubka 25 g)', sub: '', qty: 2, req: 2 },
+    ]
+  },
+  {
+    id: 'exposure',
+    icon: '🩻',
+    name: 'E — Ekspozycja / unieruchomienie / ochrona',
+    sub: 'Exposure, immobilisation & environment',
+    items: [
+      { name: 'Nożyczki ratownicze (do ubrań)', sub: '', qty: 1, req: 1 },
+      { name: 'Ciśnieniomierz manualny', sub: '', qty: 1, req: 1 },
+      { name: 'Glukometr z paskami i lancetami', sub: 'min. 20 pasków', qty: 1, req: 1 },
+      { name: 'Kołnierz ortopedyczny — dorośli', sub: '', qty: 2, req: 2 },
+      { name: 'Kołnierz ortopedyczny — dzieci', sub: '', qty: 1, req: 1 },
+      { name: 'Szyna SAM Splint', sub: 'uniwersalna, elastyczna', qty: 2, req: 2 },
+      { name: 'Pas miedniczy — dorośli', sub: 'np. SAM Pelvic Sling / T-POD', qty: 1, req: 1 },
+      { name: 'Pas miedniczy — dzieci', sub: '', qty: 1, req: 1 },
+      { name: 'Koc ratunkowy NRC (złoto-srebrny)', sub: '', qty: 5, req: 5 },
+      { name: 'Koc termoizolacyjny wielokrotnego użytku', sub: '', qty: 1, req: 1 },
+      { name: 'Termometr', sub: '', qty: 1, req: 1 },
+      { name: 'Ręcznik do osuszania twarzy', sub: '', qty: 1, req: 1 },
+      { name: 'Ręcznik do osuszania ciała', sub: '', qty: 1, req: 1 },
+    ]
+  },
+
+
+  {
+    id: 'other',
+    icon: '🧰',
+    name: 'O — Wyposażenie dodatkowe',
+    sub: 'Sprzęt dodatkowy i dokumentacja',
+    items: [
+      { name: 'Latarka taktyczna z zapasowymi bateriami', sub: '', qty: 1, req: 1 },
+      { name: 'Koc ratunkowy NRC zapasowy', sub: '', qty: 1, req: 1 },
+      { name: 'Plaster z opatrunkiem (różne rozmiary)', sub: '', qty: 20, req: 20 },
+      { name: 'Plastry przylepne (rolka)', sub: '', qty: 2, req: 2 },
+      { name: 'Notatnik + długopis', sub: '', qty: 1, req: 1 },
+      { name: 'Karty segregacyjne TRIAGE wg rozporządzenia RM', sub: 'JRG: 40 szt. / OSP: 20 szt.', qty: 40, req: 40 },
+      { name: 'Aparat do płukania oka z bocznym odpływem', sub: 'pojemność ok. 150 ml', qty: 1, req: 1 },
+      { name: 'Aspirator jadu', sub: '', qty: 1, req: 1 },
+      { name: 'Folia do przykrywania zwłok', sub: '', qty: 3, req: 3 },
+      { name: 'Pojemnik na odpady medyczne (sharps)', sub: 'pojemnik na zakazy / igły', qty: 1, req: 1 },
+      { name: 'Worki na śmieci / odpady medyczne', sub: '', qty: 2, req: 2 },
+      { name: 'Płyn do dezynfekcji rąk', sub: 'min. 100 ml', qty: 1, req: 1 },
+    ]
+  },
+  {
+    id: 'custom',
+    icon: '➕',
+    name: 'Własne wpisy — sprzęt dodatkowy',
+    sub: 'Pozycje spoza standardowej listy',
+    items: [
+      { _dynamic: 'custom_items', _label: 'Dodaj własny sprzęt / lek / materiał' },
+    ]
+  },
+  {
+    id: 'otc',
+    icon: '⭐',
+    name: '* Leki OTC',
+    sub: 'Leki dostępne bez recepty — sprawdź daty ważności',
+    items: [
+      { name: 'Paracetamol 500 mg tabl.', sub: 'ASA — nie podawać dzieciom', qty: 10, req: 10, _hasExp: true },
+      { name: 'Ibuprofen 400 mg tabl.', sub: '', qty: 10, req: 10, _hasExp: true },
+      { name: 'Kwas acetylosalicylowy 300 mg tabl.', sub: 'ASA — nie podawać dzieciom', qty: 4, req: 4, _hasExp: true },
+      { name: 'Węgiel aktywowany tabl.', sub: '', qty: 10, req: 10, _hasExp: true },
+      { name: 'Elektrolity doustne (saszetki)', sub: '', qty: 4, req: 4, _hasExp: true },
+      { name: 'Nospa (drotaweryna) 40 mg tabl.', sub: '', qty: 6, req: 6, _hasExp: true },
+      { name: 'Stoperan (loperamid) 2 mg tabl.', sub: '', qty: 6, req: 6, _hasExp: true },
+      { _dynamic: 'otc_custom', _label: 'Własne leki OTC' },
+    ]
+  },
+];
+// Helper: build exp field + N/A checkbox
+function buildExpField(stateRef, key, initialExp, initialNa, onChange) {
+  const wrap = document.createElement('div');
+  wrap.className = 'exp-wrap';
+  const expInput = document.createElement('input');
+  expInput.type = 'month';
+  expInput.className = 'item-exp' + (initialNa ? ' na-mode' : '');
+  expInput.title = 'Termin ważności';
+  expInput.value = initialNa ? '' : (initialExp || '');
+  const naBox = document.createElement('div');
+  naBox.className = 'na-check' + (initialNa ? ' checked' : '');
+  naBox.title = 'Nie dotyczy';
+  const naLbl = document.createElement('span');
+  naLbl.className = 'na-label';
+  naLbl.textContent = 'N/D';
+  function checkExp() {
+    const val = expInput.value;
+    const na = naBox.classList.contains('checked');
+    if (!na && val) {
+      const [y, mo] = val.split('-').map(Number);
+      expInput.classList.toggle('expired', new Date(y, mo - 1, 1) < new Date());
+    } else { expInput.classList.remove('expired'); }
+    if (onChange) onChange(na ? 'nd' : val, na);
+  }
+  naBox.addEventListener('click', () => {
+    naBox.classList.toggle('checked');
+    const na = naBox.classList.contains('checked');
+    expInput.classList.toggle('na-mode', na);
+    if (na) expInput.value = '';
+    checkExp();
+  });
+  expInput.addEventListener('input', () => checkExp());
+  wrap.appendChild(expInput);
+  wrap.appendChild(naBox);
+  wrap.appendChild(naLbl);
+  return wrap;
+}
+
+// Dynamic rows storage
+let dynState = {};
+
+function initDynState() {
+  MODULES.forEach(m => {
+    dynState[m.id] = {};
+    m.items.forEach(item => { if (item._dynamic) dynState[m.id][item._dynamic] = []; });
+  });
+}
+
+function addDynRow(modId, dynKey) {
+  const isOtc = dynKey === 'otc_custom';
+  const isRekawice = dynKey === 'rekawice';
+  const isNacl = dynKey === 'nacl';
+  const isCustom = dynKey === 'custom_items';
+  if (isOtc) dynState[modId][dynKey].push({ checked: false, name: '', otcQty: '', otcUnit: 'tabletek', exp: '', expNa: false });
+  else if (isRekawice) dynState[modId][dynKey].push({ checked: false, size: 'XS', qty: '', unit: 'par' });
+  else if (isNacl) dynState[modId][dynKey].push({ checked: false, ml: '250 ml', qty: '', exp: '', expNa: false });
+  else if (isCustom) dynState[modId][dynKey].push({ checked: false, name: '', ml: '', mlNa: false, qty: '', unit: 'sztuk', unitCustom: '', exp: '', expNa: false });
+  else dynState[modId][dynKey].push({ checked: false, size: '', qty: 1, exp: '', expNa: false });
+  rebuildDynSection(modId, dynKey);
+  updateAll();
+}
+
+function removeDynRow(modId, dynKey, idx) {
+  dynState[modId][dynKey].splice(idx, 1);
+  rebuildDynSection(modId, dynKey);
+  updateAll();
+}
+
+function toggleDynRow(modId, dynKey, idx) {
+  dynState[modId][dynKey][idx].checked = !dynState[modId][dynKey][idx].checked;
+  rebuildDynSection(modId, dynKey);
+  updateAll();
+}
+
+function rebuildDynSection(modId, dynKey) {
+  const container = document.getElementById('dyn-' + modId + '-' + dynKey);
+  if (!container) return;
+  container.querySelectorAll('.dynamic-row').forEach(r => r.remove());
+  const isOtc = dynKey === 'otc_custom';
+  const isRekawice = dynKey === 'rekawice';
+
+  dynState[modId][dynKey].forEach((entry, idx) => {
+    const row = document.createElement('div');
+    row.className = 'dynamic-row';
+    const chk = document.createElement('div');
+    chk.className = 'item-check' + (entry.checked ? ' checked' : '');
+    chk.addEventListener('click', () => toggleDynRow(modId, dynKey, idx));
+    row.appendChild(chk);
+
+    if (dynKey === 'custom_items') {
+      row.style.flexWrap = 'wrap';
+      row.style.rowGap = '6px';
+      const nameInput = document.createElement('input');
+      nameInput.className = 'dyn-input';
+      nameInput.style.cssText = 'flex:3;min-width:100px;';
+      nameInput.placeholder = 'Nazwa sprzętu / leku';
+      nameInput.value = entry.name || '';
+      nameInput.addEventListener('input', e => { dynState[modId][dynKey][idx].name = e.target.value; });
+      row.appendChild(nameInput);
+
+      // ml row
+      const mlRow = document.createElement('div');
+      mlRow.style.cssText = 'display:flex;align-items:center;gap:6px;width:100%;padding-left:34px;';
+      const mlLbl = document.createElement('span');
+      mlLbl.textContent = 'Objętość:';
+      mlLbl.style.cssText = 'font-size:11px;color:var(--text-hint);white-space:nowrap;';
+      const mlInput = document.createElement('input');
+      mlInput.type = 'text';
+      mlInput.className = 'otc-qty-input';
+      mlInput.placeholder = 'np. 250 ml';
+      mlInput.value = entry.ml || '';
+      mlInput.style.width = '90px';
+      mlInput.disabled = entry.mlNa || false;
+      mlInput.style.opacity = entry.mlNa ? '0.35' : '1';
+      mlInput.addEventListener('input', e => { dynState[modId][dynKey][idx].ml = e.target.value; });
+      const mlNaBox = document.createElement('div');
+      mlNaBox.className = 'na-check' + (entry.mlNa ? ' checked' : '');
+      mlNaBox.addEventListener('click', () => {
+        mlNaBox.classList.toggle('checked');
+        const na = mlNaBox.classList.contains('checked');
+        dynState[modId][dynKey][idx].mlNa = na;
+        mlInput.disabled = na; mlInput.style.opacity = na ? '0.35' : '1';
+        if (na) mlInput.value = '';
+      });
+      const mlNaLbl = document.createElement('span');
+      mlNaLbl.className = 'na-label'; mlNaLbl.textContent = 'N/D';
+      mlRow.appendChild(mlLbl); mlRow.appendChild(mlInput); mlRow.appendChild(mlNaBox); mlRow.appendChild(mlNaLbl);
+      row.appendChild(mlRow);
+
+      // qty row
+      const qtyRow = document.createElement('div');
+      qtyRow.style.cssText = 'display:flex;align-items:center;gap:6px;width:100%;padding-left:34px;';
+      const qtyLbl = document.createElement('span');
+      qtyLbl.textContent = 'Ilość:'; qtyLbl.style.cssText = 'font-size:11px;color:var(--text-hint);';
+      const qtyInput = document.createElement('input');
+      qtyInput.type = 'text'; qtyInput.className = 'otc-qty-input';
+      qtyInput.placeholder = 'Ilość'; qtyInput.value = entry.qty || ''; qtyInput.style.width = '70px';
+      qtyInput.addEventListener('input', e => { dynState[modId][dynKey][idx].qty = e.target.value; });
+      const unitSelect = document.createElement('select');
+      unitSelect.className = 'otc-unit-select';
+      const customUnitInput = document.createElement('input');
+      customUnitInput.className = 'dyn-input';
+      customUnitInput.placeholder = 'Wpisz jednostkę';
+      customUnitInput.style.cssText = 'width:100px;display:' + (entry.unit === 'inne' ? 'block' : 'none') + ';';
+      customUnitInput.value = entry.unitCustom || '';
+      customUnitInput.addEventListener('input', e => { dynState[modId][dynKey][idx].unitCustom = e.target.value; });
+      ['sztuk','ampułek','opakowań','saszetek','ml','litrów','inne'].forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u; opt.textContent = u;
+        if ((entry.unit || 'sztuk') === u) opt.selected = true;
+        unitSelect.appendChild(opt);
+      });
+      unitSelect.addEventListener('change', e => {
+        dynState[modId][dynKey][idx].unit = e.target.value;
+        customUnitInput.style.display = e.target.value === 'inne' ? 'block' : 'none';
+      });
+      qtyRow.appendChild(qtyLbl); qtyRow.appendChild(qtyInput); qtyRow.appendChild(unitSelect); qtyRow.appendChild(customUnitInput);
+      row.appendChild(qtyRow);
+
+      // exp row
+      const expRow = document.createElement('div');
+      expRow.style.cssText = 'display:flex;align-items:center;gap:6px;width:100%;padding-left:34px;padding-bottom:4px;';
+      const expLbl = document.createElement('span');
+      expLbl.textContent = 'Termin ważności:'; expLbl.style.cssText = 'font-size:11px;color:var(--text-hint);white-space:nowrap;';
+      const expWrap = buildExpField(dynState[modId][dynKey][idx], 'exp', entry.exp, entry.expNa, (val, na) => {
+        dynState[modId][dynKey][idx].exp = val; dynState[modId][dynKey][idx].expNa = na;
+      });
+      expRow.appendChild(expLbl); expRow.appendChild(expWrap);
+      row.appendChild(expRow);
+
+    } else if (dynKey === 'nacl') {
+      const mlSelect = document.createElement('select');
+      mlSelect.className = 'otc-unit-select'; mlSelect.style.cssText = 'flex:1;max-width:90px;';
+      ['10 ml','100 ml','250 ml','500 ml','1000 ml'].forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v; opt.textContent = v;
+        if ((entry.ml || '250 ml') === v) opt.selected = true;
+        mlSelect.appendChild(opt);
+      });
+      mlSelect.addEventListener('change', e => { dynState[modId][dynKey][idx].ml = e.target.value; });
+      const qtyInput = document.createElement('input');
+      qtyInput.type = 'text'; qtyInput.className = 'otc-qty-input';
+      qtyInput.placeholder = 'Szt.'; qtyInput.value = entry.qty || ''; qtyInput.style.width = '55px';
+      qtyInput.addEventListener('input', e => { dynState[modId][dynKey][idx].qty = e.target.value; });
+      const expWrap = buildExpField(dynState[modId][dynKey][idx], 'exp', entry.exp, entry.expNa, (val, na) => {
+        dynState[modId][dynKey][idx].exp = val; dynState[modId][dynKey][idx].expNa = na;
+      });
+      row.appendChild(mlSelect); row.appendChild(qtyInput); row.appendChild(expWrap);
+
+    } else if (isRekawice) {
+      const sizeSelect = document.createElement('select');
+      sizeSelect.className = 'otc-unit-select'; sizeSelect.style.cssText = 'flex:1;max-width:80px;';
+      ['XS','S','M','L','XL','XXL'].forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r; opt.textContent = r;
+        if ((entry.size || 'XS') === r) opt.selected = true;
+        sizeSelect.appendChild(opt);
+      });
+      sizeSelect.addEventListener('change', e => { dynState[modId][dynKey][idx].size = e.target.value; });
+      const qtyInput = document.createElement('input');
+      qtyInput.type = 'text'; qtyInput.className = 'otc-qty-input';
+      qtyInput.placeholder = 'Ilość'; qtyInput.value = entry.qty || ''; qtyInput.style.width = '60px';
+      qtyInput.addEventListener('input', e => { dynState[modId][dynKey][idx].qty = e.target.value; });
+      const unitSelect = document.createElement('select');
+      unitSelect.className = 'otc-unit-select';
+      ['par','szt.','opakowań'].forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u; opt.textContent = u;
+        if ((entry.unit || 'par') === u) opt.selected = true;
+        unitSelect.appendChild(opt);
+      });
+      unitSelect.addEventListener('change', e => { dynState[modId][dynKey][idx].unit = e.target.value; });
+      row.appendChild(sizeSelect); row.appendChild(qtyInput); row.appendChild(unitSelect);
+
+    } else if (isOtc) {
+      const nameInput = document.createElement('input');
+      nameInput.className = 'dyn-input dyn-size'; nameInput.placeholder = 'Nazwa leku';
+      nameInput.value = entry.name || '';
+      nameInput.addEventListener('input', e => { dynState[modId][dynKey][idx].name = e.target.value; });
+      row.appendChild(nameInput);
+      const otcWrap = document.createElement('div'); otcWrap.className = 'otc-qty-wrap';
+      const otcQtyInput = document.createElement('input');
+      otcQtyInput.type = 'text'; otcQtyInput.className = 'otc-qty-input';
+      otcQtyInput.placeholder = 'Ilość'; otcQtyInput.value = entry.otcQty || '';
+      otcQtyInput.addEventListener('input', e => { dynState[modId][dynKey][idx].otcQty = e.target.value; });
+      const otcUnitSelect = document.createElement('select');
+      otcUnitSelect.className = 'otc-unit-select';
+      ['tabletek','opakowań','saszetek','ampułek','inne'].forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u; opt.textContent = u;
+        if ((entry.otcUnit || 'tabletek') === u) opt.selected = true;
+        otcUnitSelect.appendChild(opt);
+      });
+      otcUnitSelect.addEventListener('change', e => { dynState[modId][dynKey][idx].otcUnit = e.target.value; });
+      otcWrap.appendChild(otcQtyInput); otcWrap.appendChild(otcUnitSelect);
+      row.appendChild(otcWrap);
+      const expWrap = buildExpField(dynState[modId][dynKey][idx], 'exp', entry.exp, entry.expNa, (val, na) => {
+        dynState[modId][dynKey][idx].exp = val; dynState[modId][dynKey][idx].expNa = na;
+      });
+      row.appendChild(expWrap);
+
+    } else {
+      const sizeInput = document.createElement('input');
+      sizeInput.className = 'dyn-input dyn-size'; sizeInput.placeholder = 'Rozmiar';
+      sizeInput.value = entry.size || '';
+      sizeInput.addEventListener('input', e => { dynState[modId][dynKey][idx].size = e.target.value; });
+      const qtyInput = document.createElement('input');
+      qtyInput.className = 'dyn-input dyn-qty'; qtyInput.type = 'number'; qtyInput.min = 0;
+      qtyInput.placeholder = 'Szt.'; qtyInput.value = entry.qty;
+      qtyInput.addEventListener('input', e => { dynState[modId][dynKey][idx].qty = parseInt(e.target.value) || 0; });
+      const expWrap = buildExpField(dynState[modId][dynKey][idx], 'exp', entry.exp, entry.expNa, (val, na) => {
+        dynState[modId][dynKey][idx].exp = val; dynState[modId][dynKey][idx].expNa = na;
+      });
+      row.appendChild(sizeInput); row.appendChild(qtyInput); row.appendChild(expWrap);
+    }
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'dyn-del'; delBtn.textContent = '✕';
+    delBtn.addEventListener('click', () => removeDynRow(modId, dynKey, idx));
+    row.appendChild(delBtn);
+    container.appendChild(row);
+  });
+}
+
+let state = {};
+
+function initState() {
+  initDynState();
+  MODULES.forEach(m => {
+    state[m.id] = m.items.filter(i => !i._dynamic).map(item => ({
+      checked: false, qty: item.qty, exp: '', expNa: false, otcQty: '', otcUnit: 'tabletek'
+    }));
+  });
+  updateProgress();
+}
+
+function buildUI() {
+  const container = document.getElementById('sections-container');
+  container.innerHTML = '';
+  MODULES.forEach(mod => {
+    const section = document.createElement('div');
+    section.className = 'section';
+    section.id = 'sec-' + mod.id;
+    const header = document.createElement('div');
+    header.className = 'section-header';
+    header.innerHTML = `
+      <div class="section-header-left">
+        <div class="section-icon">${mod.icon}</div>
+        <div class="section-info"><h3>${mod.name}</h3><p>${mod.sub}</p></div>
+      </div>
+      <div class="section-stats">
+        <span class="stat-badge" id="badge-${mod.id}">0/${mod.items.filter(i=>!i._dynamic).length}</span>
+        <span class="chevron" id="chev-${mod.id}">▾</span>
+      </div>`;
+    header.addEventListener('click', () => toggleSection(mod.id));
+    const body = document.createElement('div');
+    body.className = 'section-body';
+    body.id = 'body-' + mod.id;
+
+    let staticIdx = 0;
+    mod.items.forEach(item => {
+      if (item._dynamic) {
+        const dynWrap = document.createElement('div');
+        dynWrap.className = 'dynamic-section';
+        dynWrap.id = `dyn-${mod.id}-${item._dynamic}`;
+        const dynHeader = document.createElement('div');
+        dynHeader.className = 'dynamic-header';
+        const dynLabel = document.createElement('div');
+        dynLabel.className = 'dynamic-label';
+        dynLabel.textContent = item._label;
+        const addBtn = document.createElement('button');
+        addBtn.className = 'add-row-btn';
+        addBtn.innerHTML = '+ Dodaj';
+        addBtn.addEventListener('click', () => addDynRow(mod.id, item._dynamic));
+        dynHeader.appendChild(dynLabel);
+        dynHeader.appendChild(addBtn);
+        const dynLabels = document.createElement('div');
+        dynLabels.className = 'dyn-labels';
+        if (item._dynamic === 'rekawice') dynLabels.innerHTML = '<span class="dyn-lbl s">Rozmiar</span><span class="dyn-lbl q">Ilość</span><span class="dyn-lbl e">Jednostka</span>';
+        else if (item._dynamic === 'otc_custom') dynLabels.innerHTML = '<span class="dyn-lbl s">Nazwa leku</span><span class="dyn-lbl q">Ilość</span><span class="dyn-lbl e">Termin ważności</span>';
+        else if (item._dynamic === 'nacl') dynLabels.innerHTML = '<span class="dyn-lbl s">Pojemność</span><span class="dyn-lbl q">Szt.</span><span class="dyn-lbl e">Termin ważności</span>';
+        else if (item._dynamic === 'custom_items') dynLabels.innerHTML = '<span class="dyn-lbl s">Nazwa / objętość / ilość / termin ważności</span>';
+        else dynLabels.innerHTML = '<span class="dyn-lbl s">Rozmiar</span><span class="dyn-lbl q">Szt.</span><span class="dyn-lbl e">Termin ważności</span>';
+        dynWrap.appendChild(dynHeader);
+        dynWrap.appendChild(dynLabels);
+        body.appendChild(dynWrap);
+        return;
+      }
+
+      const localIdx = staticIdx++;
+      const row = document.createElement('div');
+      row.className = 'item'; row.id = `item-${mod.id}-${localIdx}`;
+      const checkBox = document.createElement('div');
+      checkBox.className = 'item-check'; checkBox.id = `chk-${mod.id}-${localIdx}`;
+      checkBox.addEventListener('click', () => toggleItem(mod.id, localIdx));
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'item-name';
+      nameDiv.innerHTML = `${item.name}${item.sub ? `<div class="sub">${item.sub}</div>` : ''}`;
+      nameDiv.addEventListener('click', () => toggleItem(mod.id, localIdx));
+      const qtyWrap = document.createElement('div'); qtyWrap.className = 'qty-wrap';
+      const ctrl = document.createElement('div'); ctrl.className = 'qty-ctrl';
+      const btnM = document.createElement('button'); btnM.className = 'qty-btn'; btnM.textContent = '−';
+      btnM.addEventListener('click', () => changeQty(mod.id, localIdx, -1));
+      const val = document.createElement('div'); val.className = 'qty-val'; val.id = `qty-${mod.id}-${localIdx}`; val.textContent = item.qty;
+      const btnP = document.createElement('button'); btnP.className = 'qty-btn'; btnP.textContent = '+';
+      btnP.addEventListener('click', () => changeQty(mod.id, localIdx, 1));
+      ctrl.appendChild(btnM); ctrl.appendChild(val); ctrl.appendChild(btnP);
+      const reqLabel = document.createElement('div'); reqLabel.className = 'qty-req'; reqLabel.textContent = 'wymagane: ' + item.req;
+      qtyWrap.appendChild(ctrl); qtyWrap.appendChild(reqLabel);
+
+      row.appendChild(checkBox);
+      row.appendChild(nameDiv);
+
+      if (item._hasExp) {
+        const otcWrap = document.createElement('div'); otcWrap.className = 'otc-qty-wrap';
+        const otcQtyInput = document.createElement('input');
+        otcQtyInput.type = 'text'; otcQtyInput.className = 'otc-qty-input';
+        otcQtyInput.placeholder = 'Ilość'; otcQtyInput.value = state[mod.id][localIdx].otcQty || '';
+        otcQtyInput.addEventListener('input', e => { state[mod.id][localIdx].otcQty = e.target.value; });
+        const otcUnitSelect = document.createElement('select'); otcUnitSelect.className = 'otc-unit-select';
+        ['tabletek','opakowań','saszetek','ampułek','inne'].forEach(u => {
+          const opt = document.createElement('option'); opt.value = u; opt.textContent = u;
+          if (state[mod.id][localIdx].otcUnit === u) opt.selected = true;
+          otcUnitSelect.appendChild(opt);
+        });
+        otcUnitSelect.addEventListener('change', e => { state[mod.id][localIdx].otcUnit = e.target.value; });
+        otcWrap.appendChild(otcQtyInput); otcWrap.appendChild(otcUnitSelect);
+        row.appendChild(otcWrap);
+        const expWrap = buildExpField(state[mod.id][localIdx], 'exp', state[mod.id][localIdx].exp, state[mod.id][localIdx].expNa,
+          (val, na) => { state[mod.id][localIdx].exp = val; state[mod.id][localIdx].expNa = na; });
+        row.appendChild(expWrap);
+      } else {
+        row.appendChild(qtyWrap);
+      }
+
+      body.appendChild(row);
+    });
+
+    section.appendChild(header);
+    section.appendChild(body);
+    container.appendChild(section);
+  });
+
+  toggleSection(MODULES[0].id);
+  updateAll();
+}
+
+function toggleSection(id) {
+  const body = document.getElementById('body-' + id);
+  const chev = document.getElementById('chev-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+function toggleItem(modId, itemIdx) {
+  state[modId][itemIdx].checked = !state[modId][itemIdx].checked;
+  const chk = document.getElementById(`chk-${modId}-${itemIdx}`);
+  const row = document.getElementById(`item-${modId}-${itemIdx}`);
+  chk.classList.toggle('checked', state[modId][itemIdx].checked);
+  row.classList.toggle('checked', state[modId][itemIdx].checked);
+  updateAll();
+}
+
+function changeQty(modId, itemIdx, delta) {
+  state[modId][itemIdx].qty = Math.max(0, state[modId][itemIdx].qty + delta);
+  document.getElementById(`qty-${modId}-${itemIdx}`).textContent = state[modId][itemIdx].qty;
+}
+
+function updateAll() { updateProgress(); updateSectionBadges(); updateSummary(); }
+
+function updateProgress() {
+  let total = 0, done = 0;
+  MODULES.forEach(m => {
+    if (m.id === 'otc' || m.id === 'custom') return;
+    state[m.id].forEach(s => { total++; if (s.checked) done++; });
+    if (dynState[m.id]) Object.values(dynState[m.id]).forEach(arr => arr.forEach(r => { total++; if (r.checked) done++; }));
+  });
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById('prog-pill').textContent = done + ' / ' + total;
+  document.getElementById('prog-bar').style.width = pct + '%';
+}
+
+function updateSectionBadges() {
+  MODULES.forEach(m => {
+    const badge = document.getElementById('badge-' + m.id);
+    if (m.id === 'otc' || m.id === 'custom') { badge.style.display = 'none'; return; }
+    let done = 0, total = 0;
+    state[m.id].forEach(s => { total++; if (s.checked) done++; });
+    if (dynState[m.id]) Object.values(dynState[m.id]).forEach(arr => arr.forEach(r => { total++; if (r.checked) done++; }));
+    badge.textContent = done + '/' + total;
+    badge.className = 'stat-badge';
+    if (total === 0) badge.classList.add('warn');
+    else if (done === total) badge.classList.add('ok');
+    else if (done > 0) badge.classList.add('warn');
+    else badge.classList.add('err');
+  });
+}
+
+function updateSummary() {
+  let total = 0, done = 0;
+  MODULES.forEach(m => {
+    if (m.id === 'otc' || m.id === 'custom') return;
+    state[m.id].forEach(s => { total++; if (s.checked) done++; });
+    if (dynState[m.id]) Object.values(dynState[m.id]).forEach(arr => arr.forEach(r => { total++; if (r.checked) done++; }));
+  });
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-ok').textContent = done;
+  document.getElementById('s-miss').textContent = total - done;
+}
+
+function resetAll() {
+  if (!confirm('Czy na pewno chcesz zresetować całą checklistę?')) return;
+  MODULES.forEach(m => {
+    let si = 0;
+    m.items.forEach(item => {
+      if (item._dynamic) { dynState[m.id][item._dynamic] = []; rebuildDynSection(m.id, item._dynamic); return; }
+      state[m.id][si].checked = false; state[m.id][si].qty = item.qty;
+      const chk = document.getElementById(`chk-${m.id}-${si}`);
+      const row = document.getElementById(`item-${m.id}-${si}`);
+      const qtyEl = document.getElementById(`qty-${m.id}-${si}`);
+      if (chk) chk.classList.remove('checked');
+      if (row) row.classList.remove('checked');
+      if (qtyEl) qtyEl.textContent = item.qty;
+      si++;
+    });
+  });
+  updateAll();
+}
+
+function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const red = [192,57,43], darkGray = [26,25,23], midGray = [107,104,96], lightGray = [240,239,235], green = [29,122,74], white = [255,255,255];
+  const bagId = document.getElementById('bag-id').value || '—';
+  const checkDate = document.getElementById('check-date').value || '—';
+  const checkerName = document.getElementById('checker-name').value || '—';
+  const notes = document.getElementById('notes').value || '—';
+  let total = 0, done = 0;
+  MODULES.forEach(m => { if (m.id==='otc'||m.id==='custom') return; state[m.id].forEach(s=>{total++;if(s.checked)done++;}); if(dynState[m.id])Object.values(dynState[m.id]).forEach(arr=>arr.forEach(r=>{total++;if(r.checked)done++;})); });
+  const pct = total > 0 ? Math.round(done/total*100) : 0;
+
+  doc.setFillColor(...red); doc.rect(0,0,210,22,'F');
+  doc.setTextColor(...white); doc.setFontSize(14); doc.setFont('helvetica','bold');
+  doc.text('TORBA RATOWNICZA R1 — PROTOKÓŁ KONTROLI WYPOSAŻENIA', 105, 9, {align:'center'});
+  doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.text('Wygenerowano przez aplikację mobilną R1 Checklist', 105, 16, {align:'center'});
+
+  let y = 30;
+  doc.setFillColor(...lightGray); doc.roundedRect(10,y,190,32,2,2,'F');
+  doc.setFontSize(8); doc.setTextColor(...midGray); doc.setFont('helvetica','bold');
+  const col1=15,col2=75,col3=135;
+  doc.text('OZNACZENIE TORBY',col1,y+6); doc.setTextColor(...darkGray); doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.text(bagId,col1,y+12);
+  doc.setFontSize(8); doc.setTextColor(...midGray); doc.setFont('helvetica','bold');
+  doc.text('DATA KONTROLI',col2,y+6); doc.setTextColor(...darkGray); doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.text(checkDate,col2,y+12);
+  doc.setFontSize(8); doc.setTextColor(...midGray); doc.setFont('helvetica','bold');
+  doc.text('SPRAWDZAJĄCY',col3,y+6); doc.setTextColor(...darkGray); doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.text(checkerName,col3,y+12);
+  const statusColor = pct===100?green:pct>=80?[139,94,0]:red;
+  doc.setFontSize(8); doc.setTextColor(...midGray); doc.setFont('helvetica','bold');
+  doc.text('KOMPLETNOŚĆ',col1,y+22); doc.setTextColor(...statusColor); doc.setFont('helvetica','bold'); doc.setFontSize(12);
+  doc.text(pct+'%  ('+done+'/'+total+' poz.)',col1,y+28);
+  doc.setFontSize(8); doc.setTextColor(...midGray); doc.setFont('helvetica','bold');
+  doc.text('UWAGI:',col2,y+22); doc.setTextColor(...darkGray); doc.setFont('helvetica','normal'); doc.setFontSize(9);
+  doc.text((notes||'—').substring(0,60),col2+12,y+22);
+
+  // GitHub profile link in info box
+  doc.setFontSize(7); doc.setTextColor(192,57,43); doc.setFont('helvetica','bold');
+  doc.text('Autor aplikacji:', col3, y+22);
+  doc.setFont('helvetica', 'normal');
+  doc.textWithLink('github.com/J4c08-M', col3, y+27, { url: 'https://github.com/J4c08-M' });
+  doc.setDrawColor(192,57,43); doc.setLineWidth(0.2);
+  doc.line(col3, y+28, col3+44, y+28);
+
+  y += 40;
+
+  doc.setFontSize(7); doc.setTextColor(...midGray); doc.setFont('helvetica','bold');
+  doc.text('PODPIS WŁASNORĘCZNY:', 135, y-5);
+  doc.setDrawColor(...midGray); doc.setLineWidth(0.3); doc.line(135,y+10,195,y+10);
+
+  MODULES.forEach(mod => {
+    let secDone = state[mod.id].filter(s=>s.checked).length;
+    let secTotal = state[mod.id].length;
+    if (dynState[mod.id]) { Object.values(dynState[mod.id]).forEach(arr=>{secTotal+=arr.length;secDone+=arr.filter(r=>r.checked).length;}); }
+    const allOk = secDone===secTotal;
+    if (y>250){doc.addPage();y=15;}
+    doc.setFillColor(...(allOk?green:red)); doc.roundedRect(10,y,190,8,1,1,'F');
+    doc.setTextColor(...white); doc.setFontSize(9); doc.setFont('helvetica','bold');
+    doc.text((mod.name.replace(/[^\x00-\x7F]/g,'').trim()||mod.id)+' ['+secDone+'/'+secTotal+']',14,y+5.5);
+    y+=11;
+
+    let pdfSI=0;
+    mod.items.forEach(item=>{
+      if(item._dynamic){
+        if(y>268){doc.addPage();y=15;}
+        doc.setFillColor(230,228,224); doc.rect(10,y,190,6,'F');
+        doc.setFontSize(7); doc.setFont('helvetica','bold'); doc.setTextColor(...midGray);
+        doc.text((item._label||'').toUpperCase(),14,y+4);
+        y+=6;
+        const dynRows=dynState[mod.id][item._dynamic]||[];
+        dynRows.forEach((r,ri)=>{
+          if(y>270){doc.addPage();y=15;}
+          doc.setFillColor(...(ri%2===0?white:[249,248,246])); doc.rect(10,y,190,7,'F');
+          if(r.checked){doc.setFillColor(...green);doc.roundedRect(12,y+1.5,4,4,0.5,0.5,'F');}
+          else{doc.setDrawColor(...midGray);doc.setLineWidth(0.3);doc.roundedRect(12,y+1.5,4,4,0.5,0.5,'S');}
+          doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(...(r.checked?midGray:darkGray));
+          const rowLabel = r.name||r.size||r.ml||'';
+          doc.text(rowLabel.substring(0,50),19,y+4.5);
+          const rowQty = r.qty||(r.otcQty?r.otcQty+' '+(r.otcUnit||''):'');
+          if(rowQty){doc.setFont('helvetica','bold');doc.setTextColor(...green);doc.text(String(rowQty),187,y+4.5,{align:'right'});}
+          if(r.exp&&!r.expNa){const[ey,em]=r.exp.split('-').map(Number);const isExp=new Date(ey,em-1,1)<new Date();doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(...(isExp?red:midGray));doc.text('T.W.:'+em+'/'+ey,148,y+4.5);}
+          y+=7;
+        });
+        if(dynRows.length===0){doc.setFillColor(...white);doc.rect(10,y,190,7,'F');doc.setFontSize(7);doc.setTextColor(...midGray);doc.setFont('helvetica','italic');doc.text('(brak wpisów)',19,y+4.5);y+=7;}
+        return;
+      }
+      const si=pdfSI++;
+      if(y>270){doc.addPage();y=15;}
+      const s=state[mod.id][si];
+      doc.setFillColor(...(si%2===0?white:[249,248,246]));doc.rect(10,y,190,7,'F');
+      if(s.checked){doc.setFillColor(...green);doc.roundedRect(12,y+1.5,4,4,0.5,0.5,'F');doc.setDrawColor(...white);doc.setLineWidth(0.6);doc.line(12.8,y+3.5,14,y+4.8);doc.line(14,y+4.8,16,y+2.2);}
+      else{doc.setDrawColor(...midGray);doc.setLineWidth(0.3);doc.roundedRect(12,y+1.5,4,4,0.5,0.5,'S');}
+      doc.setTextColor(s.checked?midGray[0]:darkGray[0],s.checked?midGray[1]:darkGray[1],s.checked?midGray[2]:darkGray[2]);
+      doc.setFont('helvetica','normal');doc.setFontSize(8);
+      doc.text(item.name.substring(0,72),19,y+4.5);
+      if(item.sub){doc.setTextColor(...midGray);doc.setFontSize(6.5);doc.text(item.sub,105,y+4.5);}
+      if(item._hasExp){
+        if(s.exp&&!s.expNa){const[ey,em]=s.exp.split('-').map(Number);const isExp=new Date(ey,em-1,1)<new Date();doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(...(isExp?red:midGray));doc.text('T.W.:'+em+'/'+ey,130,y+4.5);}
+        if(s.otcQty){doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(...green);doc.text(s.otcQty+' '+(s.otcUnit||''),187,y+4.5,{align:'right'});}
+      } else {
+        doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(...(s.qty>=item.req?green:red));
+        doc.text(String(s.qty)+' / '+item.req,187,y+4.5,{align:'right'});
+      }
+      if(s.checked){doc.setDrawColor(...midGray);doc.setLineWidth(0.2);doc.line(19,y+3.5,Math.min(19+item.name.length*1.7,115),y+3.5);}
+      y+=7;
+    });
+    y+=4;
+  });
+
+  const pageCount=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pageCount;i++){
+    doc.setPage(i);
+    doc.saveGraphicsState();
+    doc.setGState(new doc.GState({opacity:0.045}));
+    doc.setFontSize(38);doc.setFont('helvetica','bold');doc.setTextColor(192,57,43);
+    doc.text('github.com/J4c08-M',105,160,{align:'center',angle:38});
+    doc.setFontSize(22);doc.setTextColor(150,150,150);
+    doc.text('R1 Checklista',105,110,{align:'center',angle:38});
+    doc.text('R1 Checklista',105,210,{align:'center',angle:38});
+    doc.restoreGraphicsState();
+    doc.setFillColor(...lightGray);doc.rect(0,285,210,12,'F');
+    doc.setFontSize(7);doc.setTextColor(...midGray);doc.setFont('helvetica','normal');
+    doc.text('Protokol kontroli torby R1 | Wygenerowano: '+new Date().toLocaleString('pl-PL'),10,291);
+    doc.setTextColor(192,57,43);doc.text('github.com/J4c08-M',105,291,{align:'center'});
+    doc.setTextColor(...midGray);doc.text('Strona '+i+' / '+pageCount,200,291,{align:'right'});
+  }
+
+  const fileName='R1_kontrola_'+(bagId.replace(/\s+/g,'_')||'torba')+'_'+(checkDate||new Date().toISOString().slice(0,10))+'.pdf';
+  doc.save(fileName);
+}
+
+window.addEventListener('load', () => {
+  document.getElementById('check-date').value = new Date().toISOString().slice(0,10);
+  initState();
+  buildUI();
+});
+</script>
+</body>
+</html>
