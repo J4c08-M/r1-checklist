@@ -2,7 +2,7 @@
 
 Mobilna aplikacja webowa do kontroli wyposażenia torby ratowniczej R1 zgodnie z modułowymi zestawami. Działa offline jako statyczna strona HTML — bez instalacji, bez backendu.
 
-🔗 **[Otwórz aplikację](https://j4c08-m.github.io/r1-checklist/r1-checklistr1-checklist)**
+🔗 **[Otwórz aplikację](https://j4c08-m.github.io/r1-checklist/)**
 
 ---
 
